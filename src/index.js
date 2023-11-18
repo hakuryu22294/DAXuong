@@ -1,17 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import express from "express";
+import 'dotenv/config'
+import mongoose from "mongoose";
+import  {routes} from "./routes/index.js";
+import bodyParser from "body-parser";
+const app = express();
+const port = process.env.PORT || 3001;
+app.use(bodyParser.json());
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+routes(app);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+mongoose.connect(`${process.env.MONGO_DB}`)
+.then(() => console.log("Connect is successful"))
+.catch(err => console.log(err));
+
+app.listen(port,  () => console.log('listening on port ' + port));
